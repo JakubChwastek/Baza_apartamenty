@@ -1,0 +1,13 @@
+create function data() returns trigger
+language plpgsql
+as
+$$
+	declare
+	czas date;
+	begin
+	czas := now() - new.data_wyjazdu;
+	if czas<0 then update apartament set dostepnosc=0;
+	end if;
+	return null;
+	end;
+$$;

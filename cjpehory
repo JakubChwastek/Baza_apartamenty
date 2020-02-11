@@ -1,0 +1,187 @@
+  
+<html>
+<head>
+<title>PostgreSQL i php</title>
+</head>
+<body>
+<h1> TEST </h1>
+<?php
+$dbh = pg_connect("dbname=cj7apt user=cj7
+password=killer host=localhost") or die("Nie moge
+polaczyc sie z baza danych !");
+// tu powinno byc polaczenie
+// wyświetlmy dane
+$query = "Select * from klient";
+$query1 = "Select * from rezw";
+$query2 = "Select * from apartament";
+$wynik = pg_query($dbh,$query);
+$reze = pg_query($dbh,$query1);
+$apa = pg_query($dbh,$query2);
+// odbierzmy rozmiary tabeli:
+$liczba_kolumn = pg_num_fields($wynik);
+$liczba_wierszy = pg_num_rows($wynik);
+$liczba_kolumn1 = pg_num_fields($reze);
+$liczba_wierszy1 = pg_num_rows($reze);
+$liczba_kolumn2 = pg_num_fields($apa);
+$liczba_wierszy2 = pg_num_rows($apa);
+
+
+  
+  // teraz wyświetlmy dane
+echo "<TABLE border width=1>";
+echo "<TR>";
+
+for($k=0;$k<$liczba_kolumn;$k++)
+    {
+     echo "<TD>";
+     echo pg_field_name($wynik,$k);
+     echo "</TD>";
+    }
+    echo "<td>Usun</td><td>Edytuj</td></TR>";
+
+for($w=0;$w<$liczba_wierszy;$w++)
+{
+    echo "<TR>";
+    for($k=0;$k<$liczba_kolumn;$k++)
+    {
+<------>echo "<TD>";
+<------>echo pg_fetch_result($wynik,$w,$k);
+<------>echo "</TD>";
+    }
+
+    $idos = pg_fetch_result($wynik,$w,0);
+    // tu dodajemy formularz do usuwania osoby
+    echo "<TD>";
+    echo "<form action=delos.php method=POST>
+    <input type=hidden name=id_klienta value=$idos>
+    <input type=submit name=usun value=Usun></form>";
+    echo "</TD>";
+    // tu dodajemy formularz do edycji osoby
+    echo "<TD>";
+    echo "<form action=edos.php method=POST>
+    <input type=hidden name=id_klienta value=$idos>
+    <input type=hidden name=imie>
+    <input type=hidden name=nazwisko>
+    <input type=hidden name=telefon>
+    <input type=hidden name=email>
+    <input type=submit name=edytuj value=Edytuj></form>";
+    echo "</TD>";
+....
+....
+}
+echo "</TABLE>";echo "<TABLE border width=1>";
+echo "<TR>";
+
+for($k=0;$k<$liczba_kolumn1;$k++)
+    {
+     echo "<TD>";
+     echo pg_field_name($reze,$k);
+     echo "</TD>";
+    }
+    echo "<td>Usun</td><td>Edytuj</td></TR>";
+
+for($w=0;$w<$liczba_wierszy1;$w++)
+{
+    echo "<TR>";
+    for($k=0;$k<$liczba_kolumn1;$k++)
+    {
+<------>echo "<TD>";
+
+------>echo pg_fetch_result($reze,$w,$k);
+<------>echo "</TD>";
+    }
+
+    $idos = pg_fetch_result($wynik,$w,0);
+    // tu dodajemy formularz do usuwania osoby
+    echo "<TD>";
+    echo "<form action=delos.php method=POST>
+    <input type=hidden name=id_klienta value=$idos>
+    <input type=submit name=usun value=Usun></form>";
+    echo "</TD>";
+    // tu dodajemy formularz do edycji osoby
+    echo "<TD>";
+    echo "<form action=edos.php method=POST>
+    <input type=hidden name=id_klienta value=$idos>
+    <input type=hidden name=imie>
+    <input type=hidden name=nazwisko>
+    <input type=hidden name=telefon>
+    <input type=hidden name=email>
+    <input type=submit name=edytuj value=Edytuj></form>";
+    echo "</TD>";
+....
+....
+}
+echo "</TABLE>";echo "<TABLE border width=1>";
+echo "<TR>";
+
+for($k=0;$k<$liczba_kolumn2;$k++)
+    {
+     echo "<TD>";
+
+  echo pg_field_name($apa,$k);
+     echo "</TD>";
+    }
+    echo "<td>Usun</td><td>Edytuj</td></TR>";
+
+for($w=0;$w<$liczba_wierszy2;$w++)
+{
+    echo "<TR>";
+    for($k=0;$k<$liczba_kolumn2;$k++)
+    {
+<------>echo "<TD>";
+<------>echo pg_fetch_result($apa,$w,$k);
+<------>echo "</TD>";
+    }
+
+    $idos = pg_fetch_result($apa,$w,0);
+    // tu dodajemy formularz do usuwania osoby
+    echo "<TD>";
+    echo "<form action=delos.php method=POST>
+    <input type=hidden name=id_klienta value=$idos>
+    <input type=submit name=usun value=Usun></form>";
+    echo "</TD>";
+    // tu dodajemy formularz do edycji osoby
+    echo "<TD>";
+    echo "<form action=edos.php method=POST>
+    <input type=hidden name=id_klienta value=$idos>
+    <input type=hidden name=imie>
+    <input type=hidden name=nazwisko>
+    <input type=hidden name=telefon>
+    <input type=hidden name=email>
+    <input type=submit name=edytuj value=Edytuj></form>";
+    echo "</TD>";
+....
+....
+}
+echo "</TABLE>";
+
+
+
+
+echo "<FORM action = dodos.php method=POST> Dodaj nowa osobe do bazy <br />
+      Imie : <input type=text name=imie>
+      Nazwisko: <input type=text name=nazwisko>
+      Telefon: <input type=number name=telefon>
+      Email: <input type=text name=email>
+      <input type=submit name=dodaj value=dodaj>
+      </form>";
+
+echo "<FORM action = rezw.php method=POST> Dodaj nowa rezerwacje<br />
+     Data przyjazdu: <input type=date name=przyjazd>
+     Data wyjazdu: <input type=date name=wyjazd>
+     ID klienta: <input type=int name=klient>
+     ID apartamentu: <input type=int name=apartament>
+     Cena: <input type=money name=cena>
+     <input type=submit name=dodaj value=dodaj>
+     </form>";
+
+echo "<FORM action = szukos.php method=POST> Wyszukaj osobe <br />
+     Szukaj po mailu: <input type=text name=email>
+     <input type=submit name=szukaj value=szukaj>
+     </form>";
+
+echo "Jest Polaczenie z baza danych ! ";
+pg_close($dbh);
+?>
+</body>
+</html>

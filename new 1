@@ -1,0 +1,30 @@
+<html>
+<head>
+<title>Usuń osobę</title>
+</head>
+<body>
+<h1> Usuwam osobę </h1>
+<?php
+// tu umieszczamy kod skryptu
+//po pierwsze – odbierzmy paramery dla skryptu przekazane
+//metodą //POST – uzyjemy je w zapytaniu ponizej
+$id = $_POST['id_klienta'];
+// Połączmy się z bazą danych
+$dbh = pg_connect("dbname=cj7apt user=cj7
+password=killer host=localhost") or die("Nie moge
+polaczyc sie z baza danych !");
+// tu powinno byc polaczenie
+// wykonajmy zapytanie
+$query = "DELETE FROM klient where id_klienta = $id cascade";
+$wynik = pg_query($query);
+// sprawdzmy ile wierszy podmieniono
+$lz = pg_affected_rows($wynik);
+echo " Usunieto $lz osobe <br /> \n";
+pg_close($dbh);
+// zapewnijmy powrot do strony poprzedniej
+echo "<form action=cjpeh.php method=post>
+<input type=submit name=Ok value=OK>
+</form>";
+?>
+</body>
+</html>

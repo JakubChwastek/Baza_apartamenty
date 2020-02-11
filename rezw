@@ -1,0 +1,28 @@
+<html>
+<head>
+<title>Nowa rezerwacja!</title>
+</head>
+<body>
+<h1> Rezerwacja </h1>
+<?php
+
+$przyj = $_POST['przyjazd'];
+$wyj = $_POST['wyjazd'];
+$idos = $_POST['klient'];
+$idapt = $_POST['apartament'];
+$cena = $_POST['cena'];
+
+$dbh = pg_connect("dbname=cj7apt user=cj7
+password=killer host=localhost") or die("Nie moge
+polaczyc sie z baza danych !");
+
+$query = "
+	if (select dostepnost from apartament where id = $idapt) is not null
+	then
+	INSERT INTO rezw values($przyj,$wyj,'$cena','$idos','$idapt')";
+$wynik = pg_query($query);
+echo " dodano rezerwacje!";
+pg_close($dbh);
+?>
+</body>
+</html>

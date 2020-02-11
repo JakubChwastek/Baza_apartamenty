@@ -1,0 +1,69 @@
+<html>
+<head>
+<title>PostgreSQL i php</title>
+</head>
+<body>
+<h1> TEST </h1>
+<?php
+$dbh = pg_connect("dbname=cj7apt user=cj7
+password=killer host=localhost") or die("Nie moge
+polaczyc sie z baza danych !");
+// tu powinno byc polaczenie
+// wyświetlmy dane
+$query2 = "Select * from apartament";
+$apa = pg_query($dbh,$query2);
+// odbierzmy rozmiary tabeli:
+$liczba_kolumn2 = pg_num_fields($apa);
+$liczba_wierszy2 = pg_num_rows($apa);
+
+
+  
+  // teraz wyświetlmy dane
+echo "<TABLE border width=1>";
+echo "<TR>";
+
+for($k=0;$k<$liczba_kolumn;$k++)
+{
+echo "<TD>";
+echo pg_field_name($apa,$k);
+echo "</TD>";
+}
+echo "<td>Usun</td><td>Edytuj</td></TR>";
+
+for($w=0;$w<$liczba_wierszy;$w++)
+{
+echo "<TR>";
+for($k=0;$k<$liczba_kolumn;$k++)
+{
+echo "<TD>";
+echo pg_fetch_result($apa,$w,$k);
+echo "</TD>";
+}
+
+$idapt = pg_fetch_result($apa,$w,0);
+// tu dodajemy formularz do usuwania osoby
+echo "<TD>";
+echo "<form action=usunapa.php method=POST>
+<input type=hidden name=id value=$idapt>
+<input type=submit name=usun value=Usun></form>";
+echo "</TD>";
+// tu dodajemy formularz do edycji osoby
+echo "<TD>";
+echo "<form action=edos.php method=POST>
+<input type=hidden name=id value=$idapt>
+<input type=hidden name=imie>
+<input type=hidden name=nazwisko>
+<input type=hidden name=telefon>
+<input type=hidden name=email>
+<input type=submit name=edytuj value=Edytuj></form>";
+echo "</TD>";
+
+}
+echo "</TABLE>";
+pg_close($dbh);
+echo "<form action=cjpeh.php method=post>
+<input type=submit name=wroc value=wroc>
+</form>";
+?>
+</body>
+</html>
